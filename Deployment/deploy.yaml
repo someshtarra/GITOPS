@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: httpd-container
-        image: someshtarra/somesh:13
+        image: someshtarra/somesh:14
         ports:
         - containerPort: 80
         
