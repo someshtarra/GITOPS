@@ -15,9 +15,9 @@ spec:
       maxUnavailable: 1
       maxSurge: 1
   selector:
-    matchLables:
+    matchLabels:
       name: web-pod
-      app: my-wed
+      app: my-web
   template:
     metadata:
       name: httpd
