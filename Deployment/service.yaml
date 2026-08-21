@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-service
+  labels:
+    name: web-service
+    app: my-web
+spec:
+  type: LoadBalancer
+  selector:
+    name: web-pod
+    app: my-web
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
