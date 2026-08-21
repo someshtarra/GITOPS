@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: httpd-container
-        image: someshtarra/httpd:lion-3d
+        image: someshtarra/httpd:fox-3D
         ports:
         - containerPort: 80
         
