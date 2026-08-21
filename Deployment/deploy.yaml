@@ -1,0 +1,35 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argocd-deploy
+  labels:
+    name: argocd-deploy
+    app: my-app
+
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLables:
+      name: web-pod
+      app: my-wed
+  template:
+    metadata:
+      name: httpd
+      labels:
+        name: web-pod
+        app: my-web
+    spec:
+      containers:
+      - name: httpd-container
+        image: someshtarra/httpd:fox-3D
+        ports:
+        - protocol: TCP
+          port: 80
+          targetPort: 80
+        
