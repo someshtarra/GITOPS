@@ -88,8 +88,8 @@ pipeline {
           string(credentialsId: 'github_token', variable: 'GITHUB_TOKEN')
         ]) {
         sh''' 
-        git config --global user.name somesh
-        git config --gobal user.email someshtarra@gmail.com
+        git config --global user.name "somesh"
+        git config --gobal user.email "someshtarra@gmail.com"
         sed -i 's/$IMAGE_NAME:.*/$IMAGE_NAME:${BUILD_NUMBER}/g' Deployment/deploy.yaml
         git add .
         git commit -m 'updated image number ${BUILD_NUMBER}'
