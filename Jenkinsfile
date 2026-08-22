@@ -1,103 +1,110 @@
-pipeline {
+pipleline {
   agent any
-  
-  tools{
+  tools {
     maven 'maven_3'
   }
-  
-  enviroments {
-    GIT_REPO = 'GITOPS'
-    GIT_REPO_URL = 'https://github.com/someshtarra/GITOPS.git'
-    GIT_USER = 'someshtarra'
-    IMAGE_NAME = 'someshtarra/project'
-    SONAR_URL = ''
-    DOCKER_USER = 'someshtarra'
+
+  environment {
+    GIT_REPO_URL = "https://github.com/someshtarra/project-management.git"
+    GIT_USER = "someshtarra"
+    DOCKER_USER = "someshtarra"
+    DOCKER_REPO = "someshtarra/project"
+    GITOPS_REPO = "https://github.com/someshtarra/GITOPS.git"
+    GIT_BRANCH = "main"
+    GITOPS_BRANCH = "main"
+    GITOPS_NAME = "GITOPS"
   }
 
-  stages{
-    stage('check out') {
-      steps{
-        echo 'cloing code from git hub'
-        git branch: 'main',
-          url: 'https://github.com/someshtarra/project-management.git'
+  stages {
+
+    stage('Checkout stage') {
+      steps {
+        echo " cloning the code from github"
+        git branch: $GIT_BRANCH,
+          url: $GIT_REPO_URL
       }
     }
 
-    stage('Code Scaner') {
+    stage('Build and Unit test') {
       steps{
-        echo 'code scaning using sonarqube'
-        withCredentials([
-          string(
-            credentialsId: 'sonartoken',
-            variable:'SONAR'
-          )
-        ]) {
-        sh '''
-        mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-        -Dsonar.host.url=$SONAR_URL \
-        -Dsonar.token=$SONAR
-            '''
+        echo "validated, compali and unit test using maven"
+        sh 'mvn clean test'
+      }
+    }
+
+    stage('Sonar Qube test') {
+      steps {
+        echo "Scaning the code using Sonar Qube"
+        withSonarQubeEnv('SonarQube'){
+          sh 'mvn sonar:sonar'
         }
       }
     }
 
-    stage('Build Artifact') {
+    stage('Quality gate') {
       steps {
-        echo 'Building Arifact using maven'
+        timeout(time: 5, unit: 'MINUTES') {
+            waitForQualityGate abortPipeline: true
+        }
+      }
+    }
+
+    stage('Build Artifact using maven') {
+      steps {
+        echo 'build the artifact'
         sh ' mvn clean package'
       }
     }
 
-    stage('Building Docker image') {
+    stage('Build docker image') {
       steps {
-        echo 'Building image using Docker'
-        sh 'docker build -t $IMAGE_NAME:${BUILD_NUMBER} -f Dockerfile .'
+        echo 'Build image using Docker'
+        sh ' docker build -t $DOCKER_REPO:${BUILD_NUMBER} -f Dockerfile .'
       }
     }
 
-    stage('Image scan using trivy'){
-      steps{
+    stage('Scaning the Image') {
+      steps {
         echo 'Scaning image using Trivy'
-        sh ' trivy image $IMAGE_NAME:${BUILD_NUMBER}
+        sh 'trivy image --severity CRITICAL --exit-code 1 $DOCKER_REPO:${BUILD_NUMBER}'
       }
     }
 
-    stage('push To Dockerhub') {
-      steps{
-        withCredentials([
-          string(
-            credentialsId: 'docker_id',variable: 'DOCKER_PS'
-          )
+    stage('Docker push to docker-hub') {
+      steps {
+        echo 'upload the image on docker hub'
+        withCredentilas([
+          string(credentialsId: 'dockerhub', variable: 'DOCKER_PS')
         ]) {
-          sh 'echo 'DOCKER_PS' | docker login -u $DOCKER_USER --password-stdin '
-          sh 'docker push $IMAGE_NAME:${BUILD_NUMBER}'
+          sh 'docker login -u $DOCKER_USER --password-stdin'
+          sh 'docker push $DOCKER_REPO:${BUILD_NUMBER}
         }
       }
     }
 
-    stage('Cloing GITOPS repo') {
+    stage('Update GITOPS REPO'){
       steps{
-        echo 'cloing GITOPS repo'
-        git branch: 'main',
-          url: '$GIT_REPO_URL'
+        echo 'cloning the gitops repo'
+        git branch: '$GITOPS_BRANCH',
+          url: '$GITOPS_REPO'
       }
     }
-    stage('Updating deploy.yaml file'){
+
+    stage('Updating yaml file') {
       steps{
+        echo 'Updating yaml file in gitops repo'
         withCredentials([
-          string(credentialsId: 'github_token', variable: 'GITHUB_TOKEN')
-        ]) {
-        sh''' 
-        git config --global user.name "somesh"
-        git config --gobal user.email "someshtarra@gmail.com"
-        sed -i 's/$IMAGE_NAME:.*/$IMAGE_NAME:${BUILD_NUMBER}/g' Deployment/deploy.yaml
+          string(credentilasId: 'github_token', variable: 'GITHUB_TOKEN')
+        ])
+        sh '''
+        git config --global user.name $USER
+        git config --global user.email $USER_MAIL
+        sed -i 's/$DOCKER_REPO:.*/$DOCKER_REPO:${BUILD_NUMBER}/g' Deployment/deploy.yaml
         git add .
-        git commit -m 'updated image number ${BUILD_NUMBER}'
-        git push  https://${GITHUB_TOKEN}@github.com/${GIT_USER}/${GIT_REPO}.git HEAD:main
+        git commit -m "updated build number ${BUILD_NUMBER}"
+        git push https://${GITHUB_TOKEN}@github.com/${GITHUB_USER}/${GITOPS_NAME}.git HEAD:main
         '''
-        }
       }
-    }
+    } 
   }
 }
-  
