@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.example.projectmanagement.controller.ProjectControllerTest
+-------------------------------------------------------------------------------
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.325 s -- in com.example.projectmanagement.controller.ProjectControllerTest
