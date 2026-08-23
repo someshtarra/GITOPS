@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: httpd-container
-        image: someshtarra/javaproject:11
+        image: someshtarra/projectimage:11
         ports:
         - containerPort: 8080
         
