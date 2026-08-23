@@ -1,6 +1,0 @@
-/var/lib/jenkins/workspace/java-project/src/test/java/com/example/projectmanagement/ProjectManagementApplicationTest.java
-/var/lib/jenkins/workspace/java-project/src/test/java/com/example/projectmanagement/controller/ProjectControllerTest.java
-/var/lib/jenkins/workspace/java-project/src/test/java/com/example/projectmanagement/dto/ProjectDtoTest.java
-/var/lib/jenkins/workspace/java-project/src/test/java/com/example/projectmanagement/exception/ExceptionHandlingTest.java
-/var/lib/jenkins/workspace/java-project/src/test/java/com/example/projectmanagement/model/ProjectModelTest.java
-/var/lib/jenkins/workspace/java-project/src/test/java/com/example/projectmanagement/service/ProjectServiceTest.java
