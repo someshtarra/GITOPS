@@ -1,0 +1,12 @@
+/var/lib/jenkins/workspace/java-project/src/main/java/com/example/projectmanagement/ProjectManagementApplication.java
+/var/lib/jenkins/workspace/java-project/src/main/java/com/example/projectmanagement/controller/ProjectController.java
+/var/lib/jenkins/workspace/java-project/src/main/java/com/example/projectmanagement/dto/ProjectRequest.java
+/var/lib/jenkins/workspace/java-project/src/main/java/com/example/projectmanagement/dto/ProjectResponse.java
+/var/lib/jenkins/workspace/java-project/src/main/java/com/example/projectmanagement/exception/ErrorDetails.java
+/var/lib/jenkins/workspace/java-project/src/main/java/com/example/projectmanagement/exception/GlobalExceptionHandler.java
+/var/lib/jenkins/workspace/java-project/src/main/java/com/example/projectmanagement/exception/ResourceNotFoundException.java
+/var/lib/jenkins/workspace/java-project/src/main/java/com/example/projectmanagement/model/Project.java
+/var/lib/jenkins/workspace/java-project/src/main/java/com/example/projectmanagement/model/ProjectStatus.java
+/var/lib/jenkins/workspace/java-project/src/main/java/com/example/projectmanagement/repository/ProjectRepository.java
+/var/lib/jenkins/workspace/java-project/src/main/java/com/example/projectmanagement/service/ProjectService.java
+/var/lib/jenkins/workspace/java-project/src/main/java/com/example/projectmanagement/service/ProjectServiceImpl.java

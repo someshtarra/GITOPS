@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: httpd-container
-        image: someshtarra/projectimage:11
+        image: someshtarra/projectimage:${BUILD_NUMBER}
         ports:
         - containerPort: 8080
         
