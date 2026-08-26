@@ -20,7 +20,6 @@ spec:
       app: my-web
   template:
     metadata:
-      name: httpd
       labels:
         name: web-pod
         app: my-web
